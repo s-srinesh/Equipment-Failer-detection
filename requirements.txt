@@ -3,7 +3,7 @@ pandas
 scikit-learn
 matplotlib
 seaborn
-tensorflow  # or pytorch
+tensorflow  # or pytorch (pick one based on preference)
 keras
 jupyterlab
 notebook
@@ -12,4 +12,5 @@ xgboost
 lightgbm
 flask
 requests
-gunicorn==20.1.0  
+gunicorn==20.1.0
+flask-cors
