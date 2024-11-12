@@ -106,7 +106,7 @@ def predict():
         return jsonify({'error': 'Prediction failed'}), 500
 
     result = 'Equipment fails' if prediction[0] == 1 else 'Equipment not fails'
-    return jsonify({'result': result}), 200  # JSON response
+    return({'result': result}), 200  # JSON response
 
 # Route to render the HTML template
 @app.route('/')
