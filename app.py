@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 from flask_cors import CORS
 import logging
 import pandas as pd
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -93,7 +94,7 @@ def predict():
         ]
     except (KeyError, ValueError) as e:
         logging.error(f'Input error: {e}')
-        return jsonify({'error': 'Invalid input data'}), 400
+        return "Invalid input data", 400
 
     # Create a DataFrame for the features
     feature_names = numerical_cols + categorical_cols
@@ -103,10 +104,10 @@ def predict():
         prediction = clf_pipeline.predict(features_df)
     except Exception as e:
         logging.error(f'Model prediction error: {e}')
-        return jsonify({'error': 'Prediction failed'}), 500
+        return "Prediction failed", 500
 
-    result = 'Equipment fails' if prediction[0] == 1 else 'Equipment not fails'
-    return({'result': result}), 200  # JSON response
+    result = 'Equipment fails' if prediction[0] == 1 else 'Equipment does not fail'
+    return result, 200  # Plain text response
 
 # Route to render the HTML template
 @app.route('/')
@@ -114,4 +115,6 @@ def home():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Bind to 0.0.0.0 and use the PORT environment variable, defaulting to 10000
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port, debug=True)
